@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@theme {
+  /* Colores Corporativos de MAO Muebles */
+  --color-forja: #1A1A1A;
+  --color-roble: #C67D3A;
+  --color-cemento: #EAEAEA;
+  --color-puro: #FFFFFF;
+
+  /* Tipografías Corporativas */
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display: var(--font-montserrat), system-ui, sans-serif;
+}
