@@ -2,6 +2,9 @@ import Header from "../components/Header";
 import ProductCard from "../components/ProductCard";
 import { getActiveProducts } from "../lib/firebase/products";
 
+
+export const dynamic = 'force-dynamic'; //agregado para evitar los deploys
+
 // Server Component asíncrono para inyectar catálogo con SEO perfecto
 export default async function Home() {
   const products = await getActiveProducts();
