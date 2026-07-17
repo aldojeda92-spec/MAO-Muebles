@@ -11,4 +11,5 @@ export interface Product {
   isAvailable: boolean;
   createdAt?: any;
   originalPrice?: number; // Nueva variable para manejar promociones
+  category: 'mesas' | 'sillas' | 'juegos' | 'parrillas' | 'general';
 }
