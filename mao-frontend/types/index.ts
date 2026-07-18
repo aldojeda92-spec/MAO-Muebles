@@ -24,3 +24,4 @@ export interface Material {
   currentStock: number; // Ej: 12.5
   minStock: number;     // Ej: 5 (Para alertas de recompra)
   lastUpdated?: any;    // Timestamp de Firebase
+}
