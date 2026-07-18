@@ -71,7 +71,7 @@ export default function Footer() {
               </li>
               <li>
                 <a 
-                  href="https://facebook.com/maomuebles" 
+                  href="https://www.facebook.com/profile.php?id=61592066427488" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="hover:text-puro transition-colors"
