@@ -6,9 +6,11 @@ import { useRouter } from "next/navigation";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../../../lib/firebase/config";
 
+
 // TUS MÓDULOS EXISTENTES (Intactos)
 import ProductForm from "../../../components/ProductForm";
 import AdminProductList from "../../../components/AdminProductList"; 
+import AdminFinances from "../../../components/AdminFinances";
 
 // EL NUEVO MÓDULO DE COSTEO INYECTADO
 import AdminMaterials from "../../../components/AdminMaterials"; 
