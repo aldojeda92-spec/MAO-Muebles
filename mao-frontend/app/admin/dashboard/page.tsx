@@ -12,6 +12,7 @@ import AdminProductList from "../../../components/AdminProductList";
 
 // EL NUEVO MÓDULO DE COSTEO INYECTADO
 import AdminMaterials from "../../../components/AdminMaterials"; 
+import AdminProduction from "../../../components/AdminProduction"; // <--- INYECTA ESTO
 
 const MASTER_EMAIL = "aldojeda92@gmail.com";
 
