@@ -44,6 +44,12 @@ export default function RootLayout({
     <html lang="es">
       <body className={`${montserrat.variable} ${inter.variable} font-sans antialiased bg-puro`}>
         {children}
+        <body>
+  <main>
+    {children}
+  </main>
+  <Footer /> {/* <-- Inyección del Footer aquí */}
+</body>
       </body>
     </html>
   );
