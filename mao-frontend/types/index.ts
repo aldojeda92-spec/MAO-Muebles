@@ -25,3 +25,17 @@ export interface Material {
   minStock: number;     // Ej: 5 (Para alertas de recompra)
   lastUpdated?: any;    // Timestamp de Firebase
 }
+
+
+
+// types/index.ts (añade esto)
+export type TransactionType = 'ingreso' | 'egreso';
+
+export interface FinancialTransaction {
+  id?: string;
+  type: TransactionType;
+  amount: number;
+  description: string;
+  category: string; // Ej: 'Ventas', 'Insumos', 'Marketing', 'Capital'
+  date: any; // Firebase Timestamp
+}
