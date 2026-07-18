@@ -21,8 +21,12 @@ export default function ProductForm() {
     imageMacro: "",
   });
 
-  // --- 2. INYECCIÓN: Estado para el costo industrial (BOM) ---
-  const [recipeData, setRecipeData] = useState({
+// --- 2. INYECCIÓN: Estado para el costo industrial (BOM) [CORREGIDO PARA TYPESCRIPT] ---
+  // Añadimos <{ items: any[], finalProductionCost: number }> para evitar el error never[]
+  const [recipeData, setRecipeData] = useState<{
+    items: any[];
+    finalProductionCost: number;
+  }>({
     items: [],
     finalProductionCost: 0
   });
