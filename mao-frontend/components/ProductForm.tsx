@@ -1,5 +1,16 @@
 "use client";
 
+// 1. Agrega esta importación arriba con el resto
+import RecipeBuilder from "./RecipeBuilder";
+
+  // 2. INYECTA ESTE NUEVO ESTADO para el costo industrial
+  const [recipeData, setRecipeData] = useState({
+    items: [],
+    finalProductionCost: 0
+
+  // ... resto de tu código inicial
+
+
 import { useState } from "react";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../lib/firebase/config";
