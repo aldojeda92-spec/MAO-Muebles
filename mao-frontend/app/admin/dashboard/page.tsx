@@ -137,6 +137,12 @@ export default function AdminDashboard() {
           {activeTab === "insumos" && (
             <div className="animate-fadeIn w-full">
                <AdminMaterials />
+              {/* PESTAÑA 3: El nuevo Centro de Producción */}
+{activeTab === "recetas" && (
+  <div className="animate-fadeIn w-full">
+     <AdminProduction />
+  </div>
+)}
             </div>
           )}
 
