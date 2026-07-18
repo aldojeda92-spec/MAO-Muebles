@@ -1,19 +1,32 @@
+// app/admin/dashboard/page.tsx
 "use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../../../lib/firebase/config";
+
+// TUS MÓDULOS EXISTENTES (Intactos)
 import ProductForm from "../../../components/ProductForm";
-import AdminProductList from "../../../components/AdminProductList"; // IMPORTAMOS LA TABLA
+import AdminProductList from "../../../components/AdminProductList"; 
+
+// EL NUEVO MÓDULO DE COSTEO INYECTADO
+import AdminMaterials from "../../../components/AdminMaterials"; 
 
 const MASTER_EMAIL = "aldojeda92@gmail.com";
+
+// Definición de las pestañas disponibles
+type TabOption = "catalogo" | "insumos" | "recetas" | "finanzas";
 
 export default function AdminDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
   const router = useRouter();
+  
+  // Estado para controlar la navegación modular
+  const [activeTab, setActiveTab] = useState<TabOption>("catalogo");
 
+  // Tu lógica de autenticación original (sin tocar)
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (!currentUser || currentUser.email !== MASTER_EMAIL) {
@@ -42,27 +55,86 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-cemento/10 p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
-        <header className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-forja/10 pb-6 mb-8 gap-4">
+        
+        {/* HEADER CORPORATIVO (Preservado y adaptado a la identidad) */}
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-center border-b-4 border-forja pb-6 mb-6 gap-4">
           <div>
-            <h1 className="text-3xl font-display font-black text-forja uppercase tracking-tighter">Inventario y Producción</h1>
-            <p className="text-sm font-sans text-forja/70 mt-1">Sesión activa: <span className="font-bold">{user?.email}</span></p>
+            <h1 className="text-3xl font-display font-black text-forja uppercase tracking-tighter">
+              Centro de Control Operativo
+            </h1>
+            <p className="text-sm font-sans text-forja/70 mt-1 uppercase tracking-widest">
+              Sesión activa: <span className="font-bold text-forja">{user?.email}</span>
+            </p>
           </div>
-          <button onClick={handleLogout} className="px-6 py-2 bg-forja text-puro font-sans text-sm font-medium transition-colors hover:bg-forja/90">
+          <button 
+            onClick={handleLogout} 
+            className="px-6 py-2 bg-forja text-puro font-sans font-bold text-xs uppercase tracking-widest transition-colors hover:bg-forja/90"
+          >
             Cerrar Sesión
           </button>
         </header>
 
-        <main>
-          {/* Módulo Superior: Formulario de Carga */}
-          <div className="mb-12">
-            <h2 className="text-xl font-display font-bold text-forja uppercase mb-4 text-center md:text-left">Inyectar Nuevo Producto</h2>
-            <ProductForm />
-          </div>
+        {/* NAVEGACIÓN MODULAR (TABS) */}
+        <nav className="flex gap-2 overflow-x-auto border-b border-forja/20 mb-8 pb-px">
+          <button
+            onClick={() => setActiveTab("catalogo")}
+            className={`py-3 px-6 text-sm font-bold uppercase tracking-widest transition-colors border-b-4 whitespace-nowrap ${
+              activeTab === "catalogo"
+                ? "border-roble text-roble" // Acento Roble Tostado[cite: 1]
+                : "border-transparent text-forja/60 hover:text-forja"
+            }`}
+          >
+            Catálogo Web
+          </button>
+          <button
+            onClick={() => setActiveTab("insumos")}
+            className={`py-3 px-6 text-sm font-bold uppercase tracking-widest transition-colors border-b-4 whitespace-nowrap ${
+              activeTab === "insumos"
+                ? "border-roble text-roble" 
+                : "border-transparent text-forja/60 hover:text-forja"
+            }`}
+          >
+            Insumos (Costos)
+          </button>
+          <button
+            disabled
+            className="py-3 px-6 text-sm font-bold uppercase tracking-widest text-forja/30 border-b-4 border-transparent cursor-not-allowed whitespace-nowrap"
+          >
+            Recetas (BOM)
+          </button>
+          <button
+            disabled
+            className="py-3 px-6 text-sm font-bold uppercase tracking-widest text-forja/30 border-b-4 border-transparent cursor-not-allowed whitespace-nowrap"
+          >
+            Finanzas
+          </button>
+        </nav>
 
-          {/* Módulo Inferior: Gestor de Catálogo en Tiempo Real */}
-          <div className="border-t border-forja/10 pt-8">
-            <AdminProductList />
-          </div>
+        {/* RENDERIZADO CONDICIONAL DE MÓDULOS */}
+        <main>
+          
+          {/* PESTAÑA 1: Tu código original intacto */}
+          {activeTab === "catalogo" && (
+            <div className="animate-fadeIn">
+              <div className="mb-12">
+                <h2 className="text-xl font-display font-bold text-forja uppercase mb-4 text-center md:text-left">
+                  Inyectar Nuevo Producto
+                </h2>
+                <ProductForm />
+              </div>
+              <div className="border-t border-forja/10 pt-8">
+                <AdminProductList />
+              </div>
+            </div>
+          )}
+
+          {/* PESTAÑA 2: El nuevo módulo de costeo */}
+          {activeTab === "insumos" && (
+            <div className="animate-fadeIn w-full">
+               <AdminMaterials />
+            </div>
+          )}
+
         </main>
       </div>
     </div>
