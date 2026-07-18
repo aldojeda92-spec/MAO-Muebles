@@ -1,19 +1,11 @@
 "use client";
 
-// 1. Agrega esta importación arriba con el resto
-import RecipeBuilder from "./RecipeBuilder";
-
-  // 2. INYECTA ESTE NUEVO ESTADO para el costo industrial
-  const [recipeData, setRecipeData] = useState({
-    items: [],
-    finalProductionCost: 0
-
-  // ... resto de tu código inicial
-
-
 import { useState } from "react";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../lib/firebase/config";
+
+// --- 1. INYECCIÓN: Importación del nuevo módulo ---
+import RecipeBuilder from "./RecipeBuilder";
 
 export default function ProductForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -27,6 +19,12 @@ export default function ProductForm() {
     imageGeneral: "",
     imageFrontal: "",
     imageMacro: "",
+  });
+
+  // --- 2. INYECCIÓN: Estado para el costo industrial (BOM) ---
+  const [recipeData, setRecipeData] = useState({
+    items: [],
+    finalProductionCost: 0
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -53,6 +51,10 @@ export default function ProductForm() {
         imageMacro: formData.imageMacro,
         isAvailable: true,
         createdAt: serverTimestamp(),
+        
+        // --- 3. INYECCIÓN: Payload de Costos y Receta ---
+        recipe: recipeData.items,
+        productionCost: recipeData.finalProductionCost,
       });
 
       // Filtro Anti-Cuelgues: Si Firebase no responde en 10 seg, forzamos error
@@ -62,8 +64,13 @@ export default function ProductForm() {
 
       await Promise.race([uploadPromise, timeoutPromise]);
 
-      alert("Mueble inyectado correctamente con sus 3 tomas reglamentarias.");
+      alert("Mueble inyectado correctamente con sus 3 tomas reglamentarias y estructura de costos.");
+      
+      // Reseteo de campos comerciales
       setFormData({ name: "", description: "", materials: "", dimensions: "", price: "", imageGeneral: "", imageFrontal: "", imageMacro: "" });
+      
+      // --- 4. INYECCIÓN: Reseteo del módulo de costos ---
+      setRecipeData({ items: [], finalProductionCost: 0 });
       
     } catch (error: any) {
       console.error("Error inyectando catálogo:", error);
@@ -87,6 +94,7 @@ export default function ProductForm() {
         </div>
       )}
 
+      {/* --- BLOQUE COMERCIAL (Intacto) --- */}
       <div>
         <label className="block text-sm font-sans font-bold text-forja uppercase tracking-wider mb-2">Nombre del Mueble</label>
         <input required type="text" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} className="w-full p-3 bg-cemento/30 border-none font-sans text-forja focus:ring-2 focus:ring-roble outline-none" placeholder="Ej. Mesa Comedor Industrial" />
@@ -109,7 +117,7 @@ export default function ProductForm() {
       </div>
 
       <div>
-        <label className="block text-sm font-sans font-bold text-forja uppercase tracking-wider mb-2">Precio (Gs.)</label>
+        <label className="block text-sm font-sans font-bold text-forja uppercase tracking-wider mb-2">Precio de Venta (Gs.)</label>
         <input required type="number" min="0" value={formData.price} onChange={(e) => setFormData({...formData, price: e.target.value})} className="w-full p-3 bg-cemento/30 border-none font-sans text-forja focus:ring-2 focus:ring-roble outline-none" placeholder="Ej. 2500000" />
       </div>
 
@@ -131,7 +139,52 @@ export default function ProductForm() {
         </div>
       </div>
 
-      <button type="submit" disabled={isLoading} className="mt-6 w-full bg-roble text-puro font-sans font-bold uppercase tracking-widest py-4 transition-colors hover:bg-roble/90 disabled:bg-cemento disabled:text-forja flex justify-center items-center">
+      {/* --- 5. INYECCIÓN: BLOQUE INDUSTRIAL (BOM) --- */}
+      <div className="border-t-4 border-forja pt-8 mt-4">
+        <div className="mb-4">
+          <h3 className="text-2xl font-display font-black text-forja uppercase tracking-tighter leading-none">
+            Ingeniería de Costos
+          </h3>
+          <p className="text-xs font-sans text-forja/70 uppercase tracking-widest mt-1">
+            Gestión interna de rentabilidad
+          </p>
+        </div>
+        
+        {/* El componente hijo que calcula la receta */}
+        <RecipeBuilder 
+          onUpdateRecipe={(items, totalCost) => {
+            setRecipeData({ items, finalProductionCost: totalCost });
+          }} 
+        />
+
+        {/* Panel de Rentabilidad en Vivo */}
+        {recipeData.finalProductionCost > 0 && formData.price && (
+          <div className="mt-4 p-5 bg-forja text-puro border-l-8 border-roble flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-cemento/60">
+                Costo Base (Materiales + Overhead)
+              </p>
+              <p className="text-2xl font-black">
+                Gs. {Math.round(recipeData.finalProductionCost).toLocaleString("es-PY")}
+              </p>
+            </div>
+            
+            <div className="sm:text-right border-t sm:border-t-0 border-cemento/20 pt-3 sm:pt-0">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-roble">
+                Margen Bruto de Ganancia
+              </p>
+              <p className={`text-lg font-black ${
+                (Number(formData.price) - recipeData.finalProductionCost) > 0 ? "text-green-400" : "text-red-400"
+              }`}>
+                Gs. {Math.round(Number(formData.price) - recipeData.finalProductionCost).toLocaleString("es-PY")}
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* --- BOTÓN DE SUMBIT (Intacto) --- */}
+      <button type="submit" disabled={isLoading} className="mt-8 w-full bg-roble text-puro font-sans font-bold uppercase tracking-widest py-4 transition-colors hover:bg-roble/90 disabled:bg-cemento disabled:text-forja flex justify-center items-center text-sm shadow-sm">
         {isLoading ? "Inyectando a Base de Datos..." : "Publicar Mueble"}
       </button>
 
