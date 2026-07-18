@@ -87,6 +87,7 @@ export default function AdminDashboard() {
           >
             Catálogo Web
           </button>
+          
           <button
             onClick={() => setActiveTab("insumos")}
             className={`py-3 px-6 text-sm font-bold uppercase tracking-widest transition-colors border-b-4 whitespace-nowrap ${
@@ -97,16 +98,18 @@ export default function AdminDashboard() {
           >
             Insumos (Costos)
           </button>
+          
           <button
-  onClick={() => setActiveTab("recetas")}
-  className={`py-3 px-6 text-sm font-bold uppercase tracking-widest transition-colors border-b-4 whitespace-nowrap ${
-    activeTab === "recetas"
-      ? "border-roble text-roble" // Acento Roble Tostado según manual
-      : "border-transparent text-forja/60 hover:text-forja"
-  }`}
->
-  Producción (BOM)
-</button>
+            onClick={() => setActiveTab("recetas")}
+            className={`py-3 px-6 text-sm font-bold uppercase tracking-widest transition-colors border-b-4 whitespace-nowrap ${
+              activeTab === "recetas"
+                ? "border-roble text-roble" // Acento Roble Tostado[cite: 1]
+                : "border-transparent text-forja/60 hover:text-forja"
+            }`}
+          >
+            Producción (BOM)
+          </button>
+          
           <button
             disabled
             className="py-3 px-6 text-sm font-bold uppercase tracking-widest text-forja/30 border-b-4 border-transparent cursor-not-allowed whitespace-nowrap"
@@ -133,16 +136,17 @@ export default function AdminDashboard() {
             </div>
           )}
 
-          {/* PESTAÑA 2: El nuevo módulo de costeo */}
+          {/* PESTAÑA 2: El módulo de costeo de insumos */}
           {activeTab === "insumos" && (
             <div className="animate-fadeIn w-full">
                <AdminMaterials />
-              {/* PESTAÑA 3: El nuevo Centro de Producción */}
-{activeTab === "recetas" && (
-  <div className="animate-fadeIn w-full">
-     <AdminProduction />
-  </div>
-)}
+            </div>
+          )}
+
+          {/* PESTAÑA 3: El nuevo Centro de Producción (AHORA SEPARADO Y FUNCIONAL) */}
+          {activeTab === "recetas" && (
+            <div className="animate-fadeIn w-full">
+               <AdminProduction />
             </div>
           )}
 
