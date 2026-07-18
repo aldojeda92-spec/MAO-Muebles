@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Montserrat, Inter } from "next/font/google"; // Fuentes corporativas
 import "./globals.css";
+import Footer from '@/components/Footer'; // Asegúrate de que la ruta coincida con tu estructura
 
 // Cargamos las tipografías estrictas del manual de identidad
 const montserrat = Montserrat({ subsets: ["latin"], variable: "--font-montserrat" });
