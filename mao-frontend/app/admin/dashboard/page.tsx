@@ -98,11 +98,15 @@ export default function AdminDashboard() {
             Insumos (Costos)
           </button>
           <button
-            disabled
-            className="py-3 px-6 text-sm font-bold uppercase tracking-widest text-forja/30 border-b-4 border-transparent cursor-not-allowed whitespace-nowrap"
-          >
-            Recetas (BOM)
-          </button>
+  onClick={() => setActiveTab("recetas")}
+  className={`py-3 px-6 text-sm font-bold uppercase tracking-widest transition-colors border-b-4 whitespace-nowrap ${
+    activeTab === "recetas"
+      ? "border-roble text-roble" // Acento Roble Tostado según manual
+      : "border-transparent text-forja/60 hover:text-forja"
+  }`}
+>
+  Producción (BOM)
+</button>
           <button
             disabled
             className="py-3 px-6 text-sm font-bold uppercase tracking-widest text-forja/30 border-b-4 border-transparent cursor-not-allowed whitespace-nowrap"
