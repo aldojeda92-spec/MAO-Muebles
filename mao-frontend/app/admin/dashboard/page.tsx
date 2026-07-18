@@ -6,15 +6,14 @@ import { useRouter } from "next/navigation";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../../../lib/firebase/config";
 
-
 // TUS MÓDULOS EXISTENTES (Intactos)
 import ProductForm from "../../../components/ProductForm";
 import AdminProductList from "../../../components/AdminProductList"; 
-import AdminFinances from "../../../components/AdminFinances";
 
-// EL NUEVO MÓDULO DE COSTEO INYECTADO
+// EL NUEVO ECOSISTEMA ERP INYECTADO
 import AdminMaterials from "../../../components/AdminMaterials"; 
-import AdminProduction from "../../../components/AdminProduction"; // <--- INYECTA ESTO
+import AdminProduction from "../../../components/AdminProduction";
+import AdminFinances from "../../../components/AdminFinances"; // <--- Bóveda Financiera
 
 const MASTER_EMAIL = "aldojeda92@gmail.com";
 
@@ -26,7 +25,7 @@ export default function AdminDashboard() {
   const [user, setUser] = useState<any>(null);
   const router = useRouter();
   
-  // Estado para controlar la navegación modular
+  // Estado para controlar la navegación modular (Iniciamos en catálogo)
   const [activeTab, setActiveTab] = useState<TabOption>("catalogo");
 
   // Tu lógica de autenticación original (sin tocar)
@@ -59,7 +58,7 @@ export default function AdminDashboard() {
     <div className="min-h-screen bg-cemento/10 p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
         
-        {/* HEADER CORPORATIVO (Preservado y adaptado a la identidad) */}
+        {/* HEADER CORPORATIVO */}
         <header className="flex flex-col md:flex-row justify-between items-start md:items-center border-b-4 border-forja pb-6 mb-6 gap-4">
           <div>
             <h1 className="text-3xl font-display font-black text-forja uppercase tracking-tighter">
@@ -79,11 +78,12 @@ export default function AdminDashboard() {
 
         {/* NAVEGACIÓN MODULAR (TABS) */}
         <nav className="flex gap-2 overflow-x-auto border-b border-forja/20 mb-8 pb-px">
+          
           <button
             onClick={() => setActiveTab("catalogo")}
             className={`py-3 px-6 text-sm font-bold uppercase tracking-widest transition-colors border-b-4 whitespace-nowrap ${
               activeTab === "catalogo"
-                ? "border-roble text-roble" // Acento Roble Tostado[cite: 1]
+                ? "border-roble text-roble" // Acento Roble Tostado según manual
                 : "border-transparent text-forja/60 hover:text-forja"
             }`}
           >
@@ -105,7 +105,7 @@ export default function AdminDashboard() {
             onClick={() => setActiveTab("recetas")}
             className={`py-3 px-6 text-sm font-bold uppercase tracking-widest transition-colors border-b-4 whitespace-nowrap ${
               activeTab === "recetas"
-                ? "border-roble text-roble" // Acento Roble Tostado[cite: 1]
+                ? "border-roble text-roble" 
                 : "border-transparent text-forja/60 hover:text-forja"
             }`}
           >
@@ -113,17 +113,22 @@ export default function AdminDashboard() {
           </button>
           
           <button
-            disabled
-            className="py-3 px-6 text-sm font-bold uppercase tracking-widest text-forja/30 border-b-4 border-transparent cursor-not-allowed whitespace-nowrap"
+            onClick={() => setActiveTab("finanzas")}
+            className={`py-3 px-6 text-sm font-bold uppercase tracking-widest transition-colors border-b-4 whitespace-nowrap ${
+              activeTab === "finanzas"
+                ? "border-roble text-roble" 
+                : "border-transparent text-forja/60 hover:text-forja"
+            }`}
           >
             Finanzas
           </button>
+
         </nav>
 
-        {/* RENDERIZADO CONDICIONAL DE MÓDULOS */}
+        {/* RENDERIZADO CONDICIONAL DE MÓDULOS (FLAT ARCHITECTURE) */}
         <main>
           
-          {/* PESTAÑA 1: Tu código original intacto */}
+          {/* PESTAÑA 1: Catálogo y Creación de Productos */}
           {activeTab === "catalogo" && (
             <div className="animate-fadeIn">
               <div className="mb-12">
@@ -138,17 +143,24 @@ export default function AdminDashboard() {
             </div>
           )}
 
-          {/* PESTAÑA 2: El módulo de costeo de insumos */}
+          {/* PESTAÑA 2: Módulo de Costeo e Inventario Base */}
           {activeTab === "insumos" && (
             <div className="animate-fadeIn w-full">
                <AdminMaterials />
             </div>
           )}
 
-          {/* PESTAÑA 3: El nuevo Centro de Producción (AHORA SEPARADO Y FUNCIONAL) */}
+          {/* PESTAÑA 3: Centro de Producción Operativa */}
           {activeTab === "recetas" && (
             <div className="animate-fadeIn w-full">
                <AdminProduction />
+            </div>
+          )}
+
+          {/* PESTAÑA 4: Libro Mayor y Control Financiero */}
+          {activeTab === "finanzas" && (
+            <div className="animate-fadeIn w-full">
+               <AdminFinances />
             </div>
           )}
 
